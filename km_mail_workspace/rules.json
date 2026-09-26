@@ -1,0 +1,426 @@
+{
+  "_doc": "Règles de classement. Ordre = priorité (première règle qui matche gagne). Les règles personnelles (contacts, logement, école) vont dans rules.local.json (non versionné), fusionnées en tête de liste. Champs : from_domains (suffixe de domaine expéditeur), from_contains (sous-chaîne de l'adresse), subject_keywords (mots de l'objet), gmail_query (requête Gmail brute, prioritaire pour Gmail), archive (sortir de INBOX), mark_read, sensitive (jamais corbeille/désabonnement/export), newsletter (candidat désabonnement), action_if_recent (fils récents non lus -> 01_ACTION).",
+  "labels": [
+    "01_ACTION",
+    "02_ATTENTE",
+    "03_ADMIN",
+    "03_ADMIN/SANTE",
+    "03_ADMIN/CAF",
+    "03_ADMIN/EMPLOI_PUBLIC",
+    "03_ADMIN/IMPOTS",
+    "03_ADMIN/ETAT",
+    "03_ADMIN/LOGEMENT",
+    "04_FINANCE",
+    "04_FINANCE/BANQUE",
+    "04_FINANCE/CRYPTO",
+    "04_FINANCE/FACTURES",
+    "05_PRO",
+    "05_PRO/ETUDES",
+    "05_PRO/ALERTES_EMPLOI",
+    "06_PROJETS",
+    "07_PERSO",
+    "07_PERSO/FAMILLE",
+    "07_PERSO/ACHATS",
+    "07_PERSO/TRANSPORT",
+    "08_NEWSLETTERS",
+    "08_NEWSLETTERS/MODE_SHOPPING",
+    "08_NEWSLETTERS/MEDIAS",
+    "08_NEWSLETTERS/CRYPTO_FINANCE",
+    "08_NEWSLETTERS/SERVICES",
+    "08_NEWSLETTERS/AUTRES",
+    "09_NOTIFICATIONS",
+    "09_NOTIFICATIONS/SECURITE",
+    "09_NOTIFICATIONS/RESEAUX_SOCIAUX",
+    "09_NOTIFICATIONS/ALERTES",
+    "10_ARCHIVES",
+    "99_CORBEILLE"
+  ],
+  "rules": [
+    {
+      "id": "securite",
+      "label": "09_NOTIFICATIONS/SECURITE",
+      "from_domains": [
+        "accounts.google.com"
+      ],
+      "subject_keywords": [
+        "alerte de sécurité",
+        "security alert",
+        "nouvelle connexion",
+        "new login",
+        "new device",
+        "code de vérification",
+        "verification code",
+        "connexion à votre compte"
+      ],
+      "archive": true,
+      "mark_read": false,
+      "sensitive": true
+    },
+    {
+      "id": "sante",
+      "label": "03_ADMIN/SANTE",
+      "from_domains": [
+        "ameli.fr",
+        "assurance-maladie.fr",
+        "monespacesante.fr",
+        "doctolib.fr"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "sensitive": true,
+      "action_if_recent": true
+    },
+    {
+      "id": "caf",
+      "label": "03_ADMIN/CAF",
+      "from_domains": [
+        "caf.fr"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "sensitive": true,
+      "action_if_recent": true
+    },
+    {
+      "id": "emploi_public",
+      "label": "03_ADMIN/EMPLOI_PUBLIC",
+      "from_domains": [
+        "francetravail.fr",
+        "pole-emploi.fr"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "sensitive": true,
+      "action_if_recent": true
+    },
+    {
+      "id": "impots",
+      "label": "03_ADMIN/IMPOTS",
+      "from_domains": [
+        "impots.gouv.fr",
+        "dgfip.finances.gouv.fr"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "sensitive": true,
+      "action_if_recent": true
+    },
+    {
+      "id": "etat",
+      "label": "03_ADMIN/ETAT",
+      "from_domains": [
+        "ants.gouv.fr",
+        "service-public.fr",
+        "urssaf.fr",
+        "franceconnect.gouv.fr",
+        "interieur.gouv.fr",
+        "messervices.etudiant.gouv.fr",
+        "crous.fr"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "sensitive": true,
+      "action_if_recent": true
+    },
+    {
+      "id": "newsletters_crypto",
+      "label": "08_NEWSLETTERS/CRYPTO_FINANCE",
+      "from_domains": [
+        "info.mexc.com",
+        "mkt.mexc.com",
+        "news.crypto.com",
+        "substack.com"
+      ],
+      "from_contains": [
+        "news@kucoin.com"
+      ],
+      "archive": true,
+      "mark_read": true,
+      "newsletter": true
+    },
+    {
+      "id": "banque",
+      "label": "04_FINANCE/BANQUE",
+      "from_domains": [
+        "cic.fr",
+        "creditmutuel.fr",
+        "labanquepostale.fr",
+        "monabanq.com",
+        "boursorama.fr",
+        "bnpparibas.com",
+        "societegenerale.fr",
+        "credit-agricole.fr",
+        "lcl.fr",
+        "caisse-epargne.fr",
+        "banquepopulaire.fr",
+        "n26.com",
+        "revolut.com",
+        "qonto.com",
+        "wise.com",
+        "paypal.fr",
+        "paypal.com",
+        "deblock.com",
+        "traderepublic.com",
+        "lydia-app.com"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "sensitive": true,
+      "action_if_recent": true
+    },
+    {
+      "id": "crypto",
+      "label": "04_FINANCE/CRYPTO",
+      "from_domains": [
+        "binance.com",
+        "coinbase.com",
+        "kraken.com",
+        "mexc.com",
+        "kucoin.com",
+        "bybit.com",
+        "bybit.eu",
+        "crypto.com",
+        "bitpanda.com",
+        "ledger.com"
+      ],
+      "from_contains": [
+        "bybit"
+      ],
+      "archive": true,
+      "mark_read": false,
+      "sensitive": true
+    },
+    {
+      "id": "factures",
+      "label": "04_FINANCE/FACTURES",
+      "subject_keywords": [
+        "facture",
+        "invoice",
+        "reçu",
+        "receipt",
+        "avis d'échéance",
+        "échéancier",
+        "quittance"
+      ],
+      "archive": true,
+      "mark_read": false,
+      "sensitive": true
+    },
+    {
+      "id": "alertes_emploi",
+      "label": "05_PRO/ALERTES_EMPLOI",
+      "from_domains": [
+        "jobalert.indeed.com",
+        "indeed.com",
+        "hellowork.com",
+        "jobrapidoalert.com",
+        "welcometothejungle.com",
+        "jobteaser.com",
+        "apec.fr",
+        "meteojob.com",
+        "monster.fr"
+      ],
+      "archive": true,
+      "mark_read": true,
+      "newsletter": true
+    },
+    {
+      "id": "etudes",
+      "label": "05_PRO/ETUDES",
+      "from_domains": [
+        "ecandidats.fr",
+        "parcoursup.fr",
+        "campusfrance.org",
+        "superprof.com"
+      ],
+      "archive": false,
+      "mark_read": false,
+      "action_if_recent": true
+    },
+    {
+      "id": "transport",
+      "label": "07_PERSO/TRANSPORT",
+      "from_domains": [
+        "ouigo.com",
+        "sncf.fr",
+        "sncf-connect.com",
+        "li.me",
+        "account.heetch.com",
+        "maratp.fr",
+        "ratp.fr",
+        "blablacar.fr",
+        "flixbus.fr"
+      ],
+      "from_contains": [
+        "noreply@uber.com"
+      ],
+      "archive": true,
+      "mark_read": false
+    },
+    {
+      "id": "alertes",
+      "label": "09_NOTIFICATIONS/ALERTES",
+      "from_domains": [
+        "alertes.seloger.com",
+        "seloger.com",
+        "leboncoin.fr"
+      ],
+      "subject_keywords": [
+        "nouvelle annonce"
+      ],
+      "archive": true,
+      "mark_read": true
+    },
+    {
+      "id": "achats",
+      "label": "07_PERSO/ACHATS",
+      "from_domains": [
+        "vinted.fr",
+        "stockx.com"
+      ],
+      "subject_keywords": [
+        "votre commande",
+        "your order",
+        "expédié",
+        "shipped",
+        "livraison"
+      ],
+      "archive": true,
+      "mark_read": false
+    },
+    {
+      "id": "reseaux_sociaux",
+      "label": "09_NOTIFICATIONS/RESEAUX_SOCIAUX",
+      "from_domains": [
+        "facebookmail.com",
+        "service.tiktok.com",
+        "tiktok.com",
+        "mail.instagram.com",
+        "discord.com",
+        "x.com",
+        "twitter.com",
+        "snapchat.com",
+        "linkedin.com",
+        "quora.com",
+        "youtube.com",
+        "inspire.pinterest.com",
+        "pinterest.com",
+        "veve.me"
+      ],
+      "archive": true,
+      "mark_read": true
+    },
+    {
+      "id": "medias",
+      "label": "08_NEWSLETTERS/MEDIAS",
+      "from_domains": [
+        "nytimes.com",
+        "newyorktimes.com",
+        "e.nytimes.com",
+        "actu.mytf1.fr",
+        "fashionunited.fr",
+        "newsletter.letudiant.fr",
+        "e.change.org",
+        "socialgood.inc",
+        "email.nba.com"
+      ],
+      "archive": true,
+      "mark_read": true,
+      "newsletter": true
+    },
+    {
+      "id": "mode_shopping",
+      "label": "08_NEWSLETTERS/MODE_SHOPPING",
+      "from_domains": [
+        "email.arlettie.fr",
+        "official.asos.com",
+        "info.versace.com",
+        "enews.versace.com",
+        "news-longchamp.com",
+        "newsletters.nyxcosmetics.com",
+        "news-hb.hugoboss.com",
+        "news.hugoboss.com",
+        "news1.zalando.com",
+        "prive.zalando.fr",
+        "my.zalando-prive.fr",
+        "email.stoneisland.com",
+        "digital.cpcompany.com",
+        "communications.printemps.com",
+        "communication.printemps.com",
+        "newsletter.galerieslafayette.com",
+        "fnac.com",
+        "e.backmarket.fr",
+        "client.louisvuitton.com",
+        "fr-news.adidas.com",
+        "us-news.adidas.com",
+        "official.nike.com",
+        "email.hm.com",
+        "email.ralphlauren.fr",
+        "email.kenzo.com",
+        "bc.footlocker.fr",
+        "wish.com",
+        "mail.aliexpress.com",
+        "newsletter.dickieslife.com",
+        "clients.laboutiqueducoiffeur.fr",
+        "emarnews.vente-unique.com",
+        "email.westfield.com",
+        "insideapple.apple.com",
+        "news.leboncoin.fr"
+      ],
+      "archive": true,
+      "mark_read": true,
+      "newsletter": true
+    },
+    {
+      "id": "services",
+      "label": "08_NEWSLETTERS/SERVICES",
+      "from_domains": [
+        "emails.betclic.fr",
+        "metricool.com",
+        "mkt.voiapp.io",
+        "hello.heetch.com",
+        "parclick.com",
+        "legrandrex.com",
+        "trenitalia.fr",
+        "email.tacobell.com",
+        "seatgeek.com",
+        "satisfaction.francetravail.fr",
+        "satisfaction-clients.com"
+      ],
+      "from_contains": [
+        "uber@uber.com",
+        "ubereats@uber.com"
+      ],
+      "archive": true,
+      "mark_read": true,
+      "newsletter": true
+    },
+    {
+      "id": "promotions_catchall",
+      "label": "08_NEWSLETTERS/AUTRES",
+      "gmail_query": "category:promotions",
+      "python_list_unsubscribe": true,
+      "archive": true,
+      "mark_read": true,
+      "newsletter": true,
+      "catchall": true
+    },
+    {
+      "id": "social_catchall",
+      "label": "09_NOTIFICATIONS/RESEAUX_SOCIAUX",
+      "gmail_query": "category:social",
+      "archive": true,
+      "mark_read": true,
+      "catchall": true
+    }
+  ],
+  "unsubscribe_prevalidated": {
+    "_doc": "Domaines dont le désabonnement a été validé par le titulaire (2026-09-26 : alertes emploi).",
+    "domains": [
+      "jobalert.indeed.com",
+      "indeed.com",
+      "hellowork.com",
+      "jobrapidoalert.com"
+    ]
+  }
+}

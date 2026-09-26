@@ -1,0 +1,11 @@
+# Données personnelles : jamais versionnées (dépôt public)
+km_mail_workspace/inventaire/*
+km_mail_workspace/logs/*
+km_mail_workspace/exports/*
+km_mail_workspace/build/*
+km_mail_workspace/rapports/*
+!km_mail_workspace/rapports/taxonomie.md
+km_mail_workspace/rules.local.json
+!**/.gitkeep
+__pycache__/
+*.mbox
