@@ -14,6 +14,7 @@ python3 build_gmail_artifacts.py
 
 echo "== 2. Tests (moteur simulé + scripts Python, espace isolé)"
 python3 tests/test_python.py | tail -1
+python3 build_nettoyage.py >/dev/null && node tests/test_nettoyage.js | tail -1
 
 if [[ "${1:-}" == *.mbox ]]; then
   echo "== 3. Diagnostic DRY-RUN sur $1"
