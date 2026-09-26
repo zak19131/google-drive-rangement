@@ -15,12 +15,12 @@
 ## Hebdomadaire (lundi, 10 min)
 - Lancer `scripts/weekly_zero_inbox.sh` (tests, artefacts, check-list).
 - Parcourir `02_ATTENTE` : relancer tout ce qui a plus de 7 jours.
-- Parcourir `09_NOTIFICATIONS/SECURITE` : toute connexion non reconnue entraîne un changement de mot de passe et l'activation de la 2FA.
+- Les alertes de sécurité récentes arrivent dans `01_ACTION` : toute connexion non reconnue entraîne un changement de mot de passe et l'activation de la 2FA.
 - Sheet `KM_Mail_Workspace` > `actions_log` : le dernier `job_done` doit être présent et il ne doit y avoir aucun `job_error`.
 
 ## Mensuel (15 min)
 - `listNewsletters`, puis validation et `unsubscribeValidated` pour les expéditeurs jamais lus.
-- `purgeCorbeille` : ce qui est en `99_CORBEILLE` depuis plus de 30 jours part en Corbeille Gmail (si `ALLOW_TRASH`).
+- Survol de `99_CORBEILLE` (2 min) : retirer le label de tout mail à garder. Puis `purgeCorbeille` : les fils de plus de 30 jours partent en Corbeille Gmail (si `ALLOW_TRASH`, jamais avant J+30 de la première mise en quarantaine, jamais un fil sensible).
 - Ajouter une règle pour tout nouveau domaine récurrent de `01_ACTION`.
 
 ## Indicateurs

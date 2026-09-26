@@ -4,41 +4,21 @@
     "01_ACTION",
     "02_ATTENTE",
     "03_ADMIN",
-    "03_ADMIN/SANTE",
-    "03_ADMIN/CAF",
-    "03_ADMIN/EMPLOI_PUBLIC",
-    "03_ADMIN/IMPOTS",
-    "03_ADMIN/ETAT",
-    "03_ADMIN/LOGEMENT",
     "04_FINANCE",
     "04_FINANCE/BANQUE",
     "04_FINANCE/CRYPTO",
     "04_FINANCE/FACTURES",
     "05_PRO",
-    "05_PRO/ETUDES",
-    "05_PRO/ALERTES_EMPLOI",
     "06_PROJETS",
     "07_PERSO",
-    "07_PERSO/FAMILLE",
-    "07_PERSO/ACHATS",
-    "07_PERSO/TRANSPORT",
-    "08_NEWSLETTERS",
-    "08_NEWSLETTERS/MODE_SHOPPING",
-    "08_NEWSLETTERS/MEDIAS",
-    "08_NEWSLETTERS/CRYPTO_FINANCE",
-    "08_NEWSLETTERS/SERVICES",
-    "08_NEWSLETTERS/AUTRES",
     "09_NOTIFICATIONS",
-    "09_NOTIFICATIONS/SECURITE",
-    "09_NOTIFICATIONS/RESEAUX_SOCIAUX",
-    "09_NOTIFICATIONS/ALERTES",
     "10_ARCHIVES",
     "99_CORBEILLE"
   ],
   "rules": [
     {
       "id": "securite",
-      "label": "09_NOTIFICATIONS/SECURITE",
+      "label": "09_NOTIFICATIONS",
       "from_domains": [
         "accounts.google.com"
       ],
@@ -52,13 +32,14 @@
         "verification code",
         "connexion à votre compte"
       ],
-      "archive": true,
+      "archive": false,
       "mark_read": false,
-      "sensitive": true
+      "sensitive": true,
+      "action_if_recent": true
     },
     {
       "id": "sante",
-      "label": "03_ADMIN/SANTE",
+      "label": "03_ADMIN",
       "from_domains": [
         "ameli.fr",
         "assurance-maladie.fr",
@@ -72,7 +53,7 @@
     },
     {
       "id": "caf",
-      "label": "03_ADMIN/CAF",
+      "label": "03_ADMIN",
       "from_domains": [
         "caf.fr"
       ],
@@ -83,7 +64,7 @@
     },
     {
       "id": "emploi_public",
-      "label": "03_ADMIN/EMPLOI_PUBLIC",
+      "label": "03_ADMIN",
       "from_domains": [
         "francetravail.fr",
         "pole-emploi.fr"
@@ -95,7 +76,7 @@
     },
     {
       "id": "impots",
-      "label": "03_ADMIN/IMPOTS",
+      "label": "03_ADMIN",
       "from_domains": [
         "impots.gouv.fr",
         "dgfip.finances.gouv.fr"
@@ -107,7 +88,7 @@
     },
     {
       "id": "etat",
-      "label": "03_ADMIN/ETAT",
+      "label": "03_ADMIN",
       "from_domains": [
         "ants.gouv.fr",
         "service-public.fr",
@@ -124,7 +105,7 @@
     },
     {
       "id": "newsletters_crypto",
-      "label": "08_NEWSLETTERS/CRYPTO_FINANCE",
+      "label": "99_CORBEILLE",
       "from_domains": [
         "info.mexc.com",
         "mkt.mexc.com",
@@ -208,7 +189,7 @@
     },
     {
       "id": "alertes_emploi",
-      "label": "05_PRO/ALERTES_EMPLOI",
+      "label": "05_PRO",
       "from_domains": [
         "jobalert.indeed.com",
         "indeed.com",
@@ -226,7 +207,7 @@
     },
     {
       "id": "etudes",
-      "label": "05_PRO/ETUDES",
+      "label": "05_PRO",
       "from_domains": [
         "ecandidats.fr",
         "parcoursup.fr",
@@ -239,7 +220,7 @@
     },
     {
       "id": "transport",
-      "label": "07_PERSO/TRANSPORT",
+      "label": "07_PERSO",
       "from_domains": [
         "ouigo.com",
         "sncf.fr",
@@ -259,7 +240,7 @@
     },
     {
       "id": "alertes",
-      "label": "09_NOTIFICATIONS/ALERTES",
+      "label": "09_NOTIFICATIONS",
       "from_domains": [
         "alertes.seloger.com",
         "seloger.com",
@@ -273,7 +254,7 @@
     },
     {
       "id": "achats",
-      "label": "07_PERSO/ACHATS",
+      "label": "07_PERSO",
       "from_domains": [
         "vinted.fr",
         "stockx.com"
@@ -290,7 +271,7 @@
     },
     {
       "id": "reseaux_sociaux",
-      "label": "09_NOTIFICATIONS/RESEAUX_SOCIAUX",
+      "label": "09_NOTIFICATIONS",
       "from_domains": [
         "facebookmail.com",
         "service.tiktok.com",
@@ -312,7 +293,7 @@
     },
     {
       "id": "medias",
-      "label": "08_NEWSLETTERS/MEDIAS",
+      "label": "99_CORBEILLE",
       "from_domains": [
         "nytimes.com",
         "newyorktimes.com",
@@ -330,7 +311,7 @@
     },
     {
       "id": "mode_shopping",
-      "label": "08_NEWSLETTERS/MODE_SHOPPING",
+      "label": "99_CORBEILLE",
       "from_domains": [
         "email.arlettie.fr",
         "official.asos.com",
@@ -373,7 +354,7 @@
     },
     {
       "id": "services",
-      "label": "08_NEWSLETTERS/SERVICES",
+      "label": "99_CORBEILLE",
       "from_domains": [
         "emails.betclic.fr",
         "metricool.com",
@@ -397,7 +378,7 @@
     },
     {
       "id": "promotions_catchall",
-      "label": "08_NEWSLETTERS/AUTRES",
+      "label": "99_CORBEILLE",
       "gmail_query": "category:promotions",
       "python_list_unsubscribe": true,
       "archive": true,
@@ -407,7 +388,7 @@
     },
     {
       "id": "social_catchall",
-      "label": "09_NOTIFICATIONS/RESEAUX_SOCIAUX",
+      "label": "09_NOTIFICATIONS",
       "gmail_query": "category:social",
       "archive": true,
       "mark_read": true,
@@ -422,5 +403,6 @@
       "hellowork.com",
       "jobrapidoalert.com"
     ]
-  }
+  },
+  "_taxonomie_v2": "2026-09-26 validée par le titulaire : newsletters -> 99_CORBEILLE (quarantaine 30 j), sous-labels fusionnés, alertes sécurité -> 01_ACTION."
 }

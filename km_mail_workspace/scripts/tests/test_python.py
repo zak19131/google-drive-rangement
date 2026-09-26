@@ -75,8 +75,8 @@ def main():
     assert moves["<c1@x>"]["label"] == "04_FINANCE/BANQUE" and moves["<c1@x>"]["add_01_ACTION"] == "True"
     assert moves["<f1@x>"]["label"] == "04_FINANCE/FACTURES"
     assert moves["<p1@x>"]["label"] == "10_ARCHIVES/2020"
-    assert moves["<a1@x>"]["label"] == "08_NEWSLETTERS/MODE_SHOPPING"
-    print("  OK  classify_mails : banque->01_ACTION, facture, archive 2020, newsletter")
+    assert moves["<a1@x>"]["label"] == "99_CORBEILLE"
+    print("  OK  classify_mails : banque->01_ACTION, facture, archive 2020, newsletter -> 99_CORBEILLE")
 
     print(run(S / "find_duplicates.py", "--inventory", inv))
     rep = (WS / "rapports" / "doublons.md").read_text()

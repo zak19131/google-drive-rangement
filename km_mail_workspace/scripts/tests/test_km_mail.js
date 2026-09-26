@@ -133,7 +133,7 @@ const batch = fn => ts => { assert(ts.length <= 100, 'lot > 100'); ts.forEach(w 
 const GmailApp = {
   search, getUserLabelByName: n => labelObjs[n] || null, createLabel: n => labelObj(n),
   markThreadsRead: batch(t => { t.unread = false; }), markThreadsUnread: batch(t => { t.unread = true; }),
-  moveThreadsToArchive: batch(t => { t.inbox = false; }), moveThreadsToInbox: batch(t => { t.inbox = true; }),
+  moveThreadsToArchive: batch(t => { t.inbox = false; }), moveThreadsToTrash: batch(t => { t.trashed = true; }), moveThreadsToInbox: batch(t => { t.inbox = true; }),
   getThreadById: id => wrap(threads.find(t => t.id === id)),
 };
 const sheets = {};
@@ -216,12 +216,19 @@ const factures = threads.filter(t => t.labels.has('04_FINANCE/FACTURES'));
 assert(factures.length > 0);
 factures.forEach(t => assert(t.labels.has('04_FINANCE/FACTURES/' + t.date.getFullYear()), 'facture sans année : ' + t.id));
 ok('factures rangées par année : ' + factures.length + ' fils -> 04_FINANCE/FACTURES/AAAA');
-const sensitiveLabels = new Set(ctx.RULES.filter(r => r.sensitive).map(r => r.label));
+// label « sensible » = tous ses fils viennent de règles sensibles (après fusion des sous-labels, 09_NOTIFICATIONS est mixte)
+const sensitiveLabels = new Set(ctx.RULES.filter(r => r.sensitive).map(r => r.label)
+  .filter(l => ctx.RULES.filter(r => r.label === l).every(r => r.sensitive)));
 before.filter(t => t.inbox && t.unread).forEach(t => {
   const now = byId[t.id];
   if ([...now.labels].some(l => sensitiveLabels.has(l))) assert(now.unread, 'sensible marqué lu : ' + t.id);
 });
-ok('aucun fil sensible marqué lu');
+before.filter(t => t.inbox && t.unread && /sécurité|Device\/IP|Virement|Remboursement|dossier|Rendez-vous|facture|Argent/.test(t.subject))
+  .forEach(t => assert(byId[t.id].unread, 'sensible (par règle) marqué lu : ' + t.id + ' ' + t.subject));
+ok('aucun fil sensible marqué lu (contrôle par label et par règle)');
+const secu = before.filter(t => t.inbox && t.unread && t.subject === 'Alerte de sécurité' && NOW - t.date < 30 * DAY);
+secu.forEach(t => assert(byId[t.id].labels.has('01_ACTION')));
+ok('alertes de sécurité récentes non lues -> 01_ACTION (' + secu.length + ')');
 before.filter(t => !t.inbox).forEach(t => assert.strictEqual(byId[t.id].labels.size, 0));
 ok('fils hors INBOX non touchés');
 const moves = sheets.moves.rows.length - 1;
@@ -242,6 +249,21 @@ const tmp = path.join(process.env.KM_WORKSPACE || WS, 'logs');
 fs.mkdirSync(tmp, { recursive: true });
 fs.writeFileSync(path.join(tmp, 'test_inventory.csv'), csv.join('\n') + '\n');
 fs.writeFileSync(path.join(tmp, 'test_appsscript_result.csv'), result.join('\n') + '\n');
+
+// ------------------------------------------------------------ 2b. CORBEILLE (quarantaine 30 j)
+const quarantined = threads.filter(t => t.labels.has('99_CORBEILLE'));
+assert(quarantined.length > 0 && store.CORBEILLE_SINCE); ok('newsletters en quarantaine 99_CORBEILLE : ' + quarantined.length + ' fils');
+assert(quarantined.every(t => ![...t.labels].some(l => sensitiveLabels.has(l))));
+ctx.CONFIG.ALLOW_TRASH = true;
+assert.strictEqual(run('purgeCorbeille'), 0); assert(!threads.some(t => t.trashed));
+ok('purgeCorbeille refuse pendant la quarantaine (J+0), même avec ALLOW_TRASH');
+ctx.CONFIG.ALLOW_TRASH = false;
+const sinceReal = store.CORBEILLE_SINCE;
+store.CORBEILLE_SINCE = new Date(NOW - 31 * DAY).toISOString();
+const eligible = run('purgeCorbeille'); assert(eligible > 0 && !threads.some(t => t.trashed));
+ok('J+31 sans ALLOW_TRASH : ' + eligible + ' éligibles, rien supprimé');
+store.CORBEILLE_SINCE = sinceReal;
+ctx.CONFIG.ALLOW_TRASH = false;
 
 // ------------------------------------------------------------ 3. ROLLBACK
 console.log('ROLLBACK');

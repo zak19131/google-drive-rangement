@@ -257,6 +257,7 @@ function stepMove_(step, s, t0) {
       appendRows_('moves', ['horodatage', 'run_id', 'etape', 'label', 'thread_id', 'archive', 'marque_lu', '01_ACTION'],
         threads.map(t => [now_(), s.runId, step.name, step.label, t.getId(), !!step.archive, wasUnread, !!action]));
       s.moved = (s.moved || 0) + threads.length;
+      if (step.label === TRASH_LABEL) markQuarantineStart_();
     }
     s.pass++;
   }
@@ -297,8 +298,7 @@ function moveSteps_() {
   // 2. Fils sensibles laissés en INBOX : récents non lus -> 01_ACTION ; puis tout -> archive (label conservé)
   const kept = [...new Set(RULES.filter(r => !r.archive).map(r => r.label))];
   kept.forEach(l => {
-    const rule = RULES.find(r => r.label === l);
-    if (rule.action_if_recent) {
+    if (RULES.some(r => r.label === l && !r.archive && r.action_if_recent)) {
       steps.push({ type: 'move', name: 'action_' + l, label: ACTION_LABEL, archive: true, markRead: false,
                    q: 'in:inbox ' + labelQuery_(l) + ' newer_than:' + recent + ' is:unread' });
     }
@@ -439,6 +439,10 @@ function unsubscribeValidated() {
 
 // ---------------------------------------------------------------- corbeille (30 jours)
 
+function markQuarantineStart_() {
+  if (!props_().getProperty('CORBEILLE_SINCE')) props_().setProperty('CORBEILLE_SINCE', now_());
+}
+
 /** Place en 99_CORBEILLE les fils d'une requête validée (jamais les sensibles). */
 function markForTrash(query) {
   const sensitive = RULES.filter(r => r.sensitive).map(r => '-(' + r.q + ')').join(' ');
@@ -454,22 +458,38 @@ function markForTrash(query) {
     appendRows_('corbeille', ['thread_id', 'date_ajout', 'requete', 'statut'], threads.map(t => [t.getId(), now_(), query, '']));
     n += threads.length;
   }
+  if (n) markQuarantineStart_();
   log_('markForTrash', n + ' fils -> ' + TRASH_LABEL + ' (« ' + query + ' »)');
 }
 
-/** Passe en Corbeille Gmail les fils en 99_CORBEILLE depuis plus de 30 jours (si ALLOW_TRASH). */
+/**
+ * Passe en Corbeille Gmail les fils 99_CORBEILLE de plus de 30 jours, jamais avant J+30 de la première mise en quarantaine,
+ * jamais un fil sensible. Uniquement si ALLOW_TRASH. La Corbeille Gmail garde encore 30 jours (untrash possible).
+ */
 function purgeCorbeille() {
-  const sh = sheet_('corbeille', ['thread_id', 'date_ajout', 'requete', 'statut']);
-  const data = sh.getDataRange().getValues();
+  const since = props_().getProperty('CORBEILLE_SINCE');
   const limit = Date.now() - 30 * 24 * 3600 * 1000;
-  let n = 0;
-  for (let i = 1; i < data.length; i++) {
-    if (new Date(data[i][1]).getTime() > limit || data[i][3] === 'PURGE') continue;
-    if (CONFIG.DRY_RUN || !CONFIG.ALLOW_TRASH) { n++; continue; }
-    const t = GmailApp.getThreadById(data[i][0]);
-    if (t && t.getLabels().some(l => l.getName() === TRASH_LABEL)) { t.moveToTrash(); sh.getRange(i + 1, 4).setValue('PURGE'); n++; }
+  if (!since || new Date(since).getTime() > limit) {
+    log_('purgeCorbeille', 'quarantaine en cours depuis ' + since + ' : rien à faire');
+    return 0;
   }
-  log_('purgeCorbeille', n + ' fils ' + (CONFIG.DRY_RUN || !CONFIG.ALLOW_TRASH ? 'éligibles (non exécuté)' : 'mis en Corbeille'));
+  const sensitive = RULES.filter(r => r.sensitive).map(r => '-(' + r.q + ')').join(' ');
+  const q = labelQuery_(TRASH_LABEL) + ' older_than:30d ' + sensitive;
+  if (CONFIG.DRY_RUN || !CONFIG.ALLOW_TRASH) {
+    const n = countQuery_(q);
+    log_('purgeCorbeille', n + ' fils éligibles (non exécuté : DRY_RUN ou ALLOW_TRASH=false)');
+    return n;
+  }
+  let n = 0;
+  while (true) {
+    const threads = GmailApp.search(q, 0, CONFIG.BATCH);
+    if (!threads.length) break;
+    GmailApp.moveThreadsToTrash(threads);
+    appendRows_('corbeille', ['thread_id', 'date_ajout', 'requete', 'statut'], threads.map(t => [t.getId(), now_(), 'purge', 'CORBEILLE_GMAIL']));
+    n += threads.length;
+  }
+  log_('purgeCorbeille', n + ' fils mis en Corbeille Gmail');
+  return n;
 }
 
 // ---------------------------------------------------------------- routine hebdomadaire

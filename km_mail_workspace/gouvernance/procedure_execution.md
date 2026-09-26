@@ -27,6 +27,10 @@ Prérequis : `build/KM_Mail.gs` et `build/gmail_filters.xml` générés par `pyt
 14. Onglet `desabonnements` : mettre `OUI` dans la colonne VALIDER des lignes retenues.
 15. `ALLOW_UNSUBSCRIBE: true`, puis exécuter `unsubscribeValidated`. Seuls les liens « one-click » HTTPS sont appelés. Les liens `mailto` restent à traiter à la main.
 
+## Suppression des newsletters (J+30)
+16. Pendant 30 jours, les newsletters restent consultables dans `99_CORBEILLE`. Retirer le label de celles à garder.
+17. À J+30 : `ALLOW_TRASH: true`, puis exécuter `purgeCorbeille`. Le code refuse toute purge avant J+30 et exclut les règles sensibles. Les fils restent 30 jours de plus dans la Corbeille Gmail (récupérables).
+
 ## Retour arrière
 - `rollback` : remet en INBOX tout ce qui a été archivé et en non-lu tout ce qui a été marqué lu.
 - `rollbackLabels` : retire en plus les labels de taxonomie (retour exact à l'état initial).
@@ -38,4 +42,4 @@ Prérequis : `build/KM_Mail.gs` et `build/gmail_filters.xml` générés par `pyt
 - Arrêt net à la première erreur, sans reprise automatique.
 - Lots de 100 fils au maximum. Anti-boucle : arrêt si l'index de recherche Gmail ne se met pas à jour.
 - Fils sensibles : jamais marqués lus, jamais mis en corbeille, jamais proposés au désabonnement.
-- Aucune suppression : la Corbeille n'est utilisée que par `purgeCorbeille`, avec `ALLOW_TRASH: true` et 30 jours de quarantaine.
+- Aucune suppression directe : seul `purgeCorbeille` utilise la Corbeille, avec `ALLOW_TRASH: true` et après 30 jours de quarantaine (vérifiés par le code).
