@@ -1,0 +1,23 @@
+{
+  "nom": "EXEMPLE — remplacer par les données mesurées",
+  "profil": "high_ticket",
+  "prix_unitaire_eur": 450,
+  "marge_brute_pct": 28,
+  "recherches_mensuelles": 12000,
+  "keyword_competitiveness": null,
+  "revendeurs_actifs": 14,
+  "vendeurs_dominants": false,
+  "fournisseurs_identifies": 8,
+  "ventes_mensuelles_page1": null,
+  "avis_moyens_page1": null,
+  "valeur_percue_ambigue": null,
+  "saisonnalite": "moderee",
+  "tendance": "stable",
+  "fidelite_marque": false,
+  "taux_retour_estime_pct": 8,
+  "fragile": false,
+  "rachat_recurrent": false,
+  "upsells_accessoires": true,
+  "differenciation": true,
+  "plan_test": {"canal": "google_ads"}
+}
