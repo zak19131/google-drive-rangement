@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "date": "2026-09-28",
+  "devise_note": "Seuils des sources en USD, appliqués en EUR à valeur nominale (hypothèse conservatrice).",
+  "regle_ceo_ads": {
+    "id": "G1",
+    "prix_min_eur": 30,
+    "canaux_payants": ["meta_ads", "facebook_ads", "instagram_ads", "tiktok_ads", "google_ads", "pinterest_ads", "snapchat_ads"],
+    "source": "Directive CEO 2026-09-28 ; appui empirique MW-2 (CAC 15-30 $ vs ~5 $ de marge sur un produit à 28 $)"
+  },
+  "eliminatoires_communs": {
+    "marge_brute_min_pct": {"valeur": 25, "source": "DSL-1/DSL-2 : marge ~25 %, 25-30 %"},
+    "taux_retour_max_pct": {"valeur": 20, "source": "MW-2 : retours ~20 % (santé) / 20-25 % (mode) = échec"},
+    "saisonnalite_interdite": {"valeur": "forte", "source": "DSL-4 (test Evergreen) ; MW-1 'Avoid seasonal goods'"},
+    "tendance_interdite": {"valeur": "chute", "source": "MW-1 (hula hoops) ; MW-2 (fads)"},
+    "fidelite_marque_interdite": {"valeur": true, "source": "DSL-1 'no brand loyalty' ; MW-1 électronique à valeur connue"}
+  },
+  "profils": {
+    "high_ticket": {
+      "description": "Méthode Drop Ship Lifestyle (Anton Kraly)",
+      "prix_min": {"valeur": 200, "source": "DSL-1"},
+      "prix_ideal": {"min": 200, "max": 700, "source": "DSL-1"},
+      "prix_large": {"min": 200, "max": null, "source": "DSL-2 : 200-5 000 $+"},
+      "demande_recherches_mois": {"excellent": 30000, "bon": 10000, "minimum": 1000, "source": "DSL-4 (30 000 critère 2022 ; 10 000 historique) ; DSL-3 'thousands'"},
+      "revendeurs_actifs": {"min": 10, "max": 20, "source": "DSL-3"},
+      "fournisseurs": {"excellent": 20, "minimum": 5, "source": "DSL-4 (>=20) ; DSL-3 (>=5 approbations)"}
+    },
+    "marketplace": {
+      "description": "Méthode MyWifeQuitHerJob (Steve Chou)",
+      "prix_min": {"valeur": 20, "source": "MW-1 'at least $20'"},
+      "prix_ideal": {"min": 20, "max": 50, "source": "MW-1 encadré Amazon"},
+      "prix_large": {"min": 15, "max": 200, "source": "MW-1 'sweet spot'"},
+      "recherches_mois": {"excellent": 3000, "minimum": 1500, "kc_max": 35, "source": "MW-1 (Long Tail Pro)"},
+      "ventes_mois_page1": {"excellent": 1500, "minimum": 300, "source": "MW-1 (corps / encadré)"},
+      "avis_moyens_page1": {"excellent": 100, "maximum": 500, "source": "MW-1 (corps / encadré)"}
+    }
+  },
+  "verdict": {
+    "go_test": 75,
+    "a_approfondir": 60,
+    "note": "Seuils de verdict = calibrage COO (hypothèse), pas un chiffre des auteurs."
+  }
+}
