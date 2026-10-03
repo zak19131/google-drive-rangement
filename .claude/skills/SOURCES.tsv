@@ -1,0 +1,16 @@
+skill	source_repo	path	commit	date
+web-design-guidelines	vercel-labs/agent-skills	skills/web-design-guidelines	063bee9	2026-08-28
+video-lens	kar2phi/video-lens	skills/video-lens	c3f42be	2026-08-22
+find-skills	vercel-labs/skills	skills/find-skills	18f96ea	2026-10-02
+agent-browser	vercel-labs/agent-browser	skills/agent-browser	526157c	2026-10-03
+content-strategy	coreyhaines31/marketingskills	skills/content-strategy	dda3841	2026-10-02
+seo-audit	coreyhaines31/marketingskills	skills/seo-audit	dda3841	2026-10-02
+ui-ux-pro-max	nextlevelbuilder/ui-ux-pro-max-skill	.claude/skills/ui-ux-pro-max	09170ee	2026-09-27
+minimalist-ui	Leonxlnx/taste-skill	skills/minimalist-skill	ce26fc2	2026-09-26
+grill-me	mattpocock/skills	skills/productivity/grill-me	d81f3a1	2026-09-29
+ai-seo	coreyhaines31/marketingskills	skills/ai-seo	dda3841	2026-10-02
+anti-ui-slop	github/awesome-copilot	skills/anti-ui-slop	143a3d9	2026-10-02
+pricing	coreyhaines31/marketingskills	skills/pricing	dda3841	2026-10-02
+caveman	JuliusBrussee/caveman	skills/caveman	aeb45e2	2026-10-03
+video-use	browser-use/video-use	.	b877063	2026-09-23
+grilling	mattpocock/skills	skills/productivity/grilling	d81f3a1	2026-09-29
